@@ -248,6 +248,7 @@ def _impl(ctx):
                         flags = [
                             "-g0",
                             "-O2",
+			    "-U_FORTIFY_SOURCE", # it may have been already defined
                             "-D_FORTIFY_SOURCE=1",
                             "-DNDEBUG",
                             "-ffunction-sections",
