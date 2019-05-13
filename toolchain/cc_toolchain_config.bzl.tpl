@@ -191,6 +191,13 @@ def _impl(ctx):
         ],
     )
 
+    # MacOS doesn't support --gc-sections, so only include it if our cpu arch is not darwin
+    flag_groups_pre = []
+    if (ctx.attr.cpu == "darwin"):
+        flag_groups_pre = [flag_group(flags = [""])],
+    else:
+        flag_groups_pre = [flag_group(flags = ["-Wl,--gc-sections"])],
+
     default_link_flags_feature = feature(
         name = "default_link_flags",
         enabled = True,
@@ -208,7 +215,7 @@ def _impl(ctx):
             ),
             flag_set(
                 actions = all_link_actions,
-                flag_groups = [flag_group(flags = ["-Wl,--gc-sections"])],
+                flag_groups = flag_groups_pre,
                 with_features = [with_feature_set(features = ["opt"])],
             ),
         ],
